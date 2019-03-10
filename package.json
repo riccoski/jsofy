@@ -3,14 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.9.2",
+    "@material-ui/icons": "^3.0.2",
     "@types/jest": "24.0.9",
     "@types/node": "11.10.4",
     "@types/react": "16.8.6",
+    "@types/react-codemirror": "^1.0.2",
     "@types/react-dom": "16.8.2",
+    "codemirror": "^5.44.0",
+    "js-beautify": "^1.9.0",
+    "node-sass": "^4.11.0",
     "react": "^16.8.3",
+    "react-codemirror2": "^5.1.0",
     "react-dom": "^16.8.3",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5",
-    "typescript": "3.3.3333"
+    "typescript": "3.3.3333",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -26,5 +35,10 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@types/js-beautify": "^1.8.0",
+    "@types/react-router-dom": "^4.3.1",
+    "@types/uuid": "^3.4.4"
+  }
 }
