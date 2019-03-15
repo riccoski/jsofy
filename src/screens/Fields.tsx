@@ -10,11 +10,10 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemSecondaryAction
+  ListItemSecondaryAction,
+  Paper
 } from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
-import DeleteIcon from "@material-ui/icons/Delete";
-import StarIcon from "@material-ui/icons/Star";
+import { Delete as DeleteIcon, Star as StarIcon } from "@material-ui/icons";
 import { Route, Switch } from "react-router-dom";
 import FieldForm from "../components/FieldForm";
 import { iField, Store } from "../App";
@@ -57,19 +56,25 @@ function Field({
   id,
   isTitle = false,
   label,
+  name,
+  type,
   onClick,
   onDelete
 }: {
   id: string;
-  isTitle: Boolean;
+  isTitle: boolean;
   label: string;
+  name: string;
+  type: string;
   onClick: Function;
   onDelete: Function;
 }) {
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
 
   function handleClick() {
     onClick(id);
+    setOpenEdit(true);
   }
 
   function handleConfirm() {
@@ -94,6 +99,17 @@ function Field({
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
+      <FieldForm
+        open={openEdit}
+        onClose={() => setOpenEdit(false)}
+        initialValues={{
+          id,
+          name,
+          label,
+          type,
+          isTitle
+        }}
+      />
       <DeleteConfirmation
         open={open}
         onClose={handleClose}
@@ -108,8 +124,13 @@ function Fields({ history }: { history: any }) {
   const { dispatch, fields }: { dispatch: any; fields: iField[] } = useContext(
     Store
   );
+
   function handleClick(id: string) {
     history.push(`/fields/edit/${id}`);
+  }
+
+  function handleClose() {
+    history.push("/fields");
   }
 
   function handleDelete(fieldId: string) {
@@ -153,8 +174,10 @@ function Fields({ history }: { history: any }) {
         Add Field
       </Button>
       <Switch>
-        <Route path="/fields/edit/:id" component={FieldForm} />
-        <Route path="/fields/add" component={FieldForm} />
+        <Route
+          path="/fields/add"
+          component={() => <FieldForm open={true} onClose={handleClose} />}
+        />
       </Switch>
     </div>
   );

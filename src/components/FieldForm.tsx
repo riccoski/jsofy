@@ -1,5 +1,5 @@
 //  @flow
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Dialog,
@@ -15,7 +15,7 @@ import {
 import uuid from "uuid/v4";
 
 import { Store, iField } from "../App";
-import { ADD_FIELD } from "../actions";
+import { ADD_FIELD, EDIT_FIELD } from "../actions";
 
 const defaultData = {
   id: uuid(),
@@ -26,13 +26,15 @@ const defaultData = {
 };
 
 function FieldForm({
-  history,
-  initialValues = defaultData
+  onClose,
+  initialValues,
+  open = false
 }: {
-  history: any;
-  initialValues: iField;
+  onClose?: Function;
+  initialValues?: iField;
+  open: boolean;
 }) {
-  const [state, setState] = useState(initialValues);
+  const [state, setState] = useState(initialValues || defaultData);
   const {
     dispatch,
     typeOptions = []
@@ -40,7 +42,6 @@ function FieldForm({
 
   function handleChange(event: any) {
     const { name, value } = event.target;
-
     setState({
       ...state,
       [name]: value
@@ -48,21 +49,20 @@ function FieldForm({
   }
 
   function handleClose() {
-    history.push("/fields");
+    if (onClose) onClose();
   }
 
   function handleSubmit() {
     dispatch({
-      ...state,
-      type: ADD_FIELD
+      field: { ...state },
+      type: initialValues ? EDIT_FIELD : ADD_FIELD
     });
-
     handleClose();
   }
   return (
-    <Dialog open={true} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogTitle>
-        {!!state.label.length ? state.label : "Add Field"}
+        {!!initialValues ? initialValues.label : "Add Field"}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>

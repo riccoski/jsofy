@@ -1,6 +1,7 @@
 //  @flow
 import React, { useContext, useState, useEffect } from "react";
 import { js_beautify as beautify } from "js-beautify";
+import { upperFirst } from "lodash";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import { UnControlled as CodeMirror } from "react-codemirror2";
@@ -28,14 +29,13 @@ function Start({ history }: Props) {
     dispatch({ type: "RESET" });
   }, []);
 
-  function handleChange(editor: any, data: any, code: string) {
+  function handleChange(_: any, __: any, code: string) {
     setBody(code.replace(/\\/g, ""));
   }
 
   const options = {
     mode: "javascript",
     lineNumbers: false
-    // theme: "material"
   };
 
   function handleSubmit() {
@@ -45,7 +45,7 @@ function Start({ history }: Props) {
 
       const fields = Object.keys(codeParsed).map(k => ({
         id: uuid(),
-        label: k, //.startUpperCase(),
+        label: upperFirst(k),
         name: k,
         type: typeof codeParsed[k] == "string" ? "string" : "Dropdown",
         isTitle: k == "name" || k == "caption"
@@ -53,10 +53,8 @@ function Start({ history }: Props) {
 
       dispatch({
         type: "START",
-        payload: {
-          items,
-          fields
-        }
+        items,
+        fields
       });
       history.push("/fields");
     } catch (error) {

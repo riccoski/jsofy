@@ -1,9 +1,12 @@
 import React, { createContext, useReducer } from "react";
 import { js_beautify as beautify } from "js-beautify";
-import { blueGrey, red, purple } from "@material-ui/core/colors";
+import { blueGrey } from "@material-ui/core/colors";
 import { Route, Switch, withRouter } from "react-router-dom";
+import Content from "./screens/Content";
 import Fields from "./screens/Fields";
 import Start from "./screens/Start";
+import rootReducer from "./reducers";
+
 const typeOptions = [
   { label: "Dropdown", value: "dropdown" },
   { label: "True or False", value: "boolean" },
@@ -32,21 +35,8 @@ export const Store = createContext({
 
 const appBackground = blueGrey[900]; // #F44336
 
-function reducer(state: any, action: any) {
-  switch (action.type) {
-    case "START":
-      return { ...state, ...action.payload };
-    case "SET_CODE":
-      return { ...state, code: beautify(action.value) };
-    case "RESET":
-      return { ...initialState };
-    default:
-      return state;
-  }
-}
-
 function App({ history }: { history?: any }) {
-  const [store, dispatch]: [any, any] = useReducer(reducer, initialState);
+  const [store, dispatch]: [any, any] = useReducer(rootReducer, initialState);
 
   function handleClick() {
     history.push("/");
@@ -78,11 +68,10 @@ function App({ history }: { history?: any }) {
         <Switch>
           <Route exact path="/" component={Start} />
           <Route path="/fields" component={Fields} />
-          {/*
-        <Route path="/content" component={Content} /> */}
+          <Route path="/content" component={Content} />
         </Switch>
         <footer style={{ opacity: 0.3, textAlign: "center" }}>
-          <small>&copy; 2017 Ricco Sobers</small>
+          <small>&copy; {new Date().getFullYear()} Ricco Sobers</small>
         </footer>
       </div>
     </Store.Provider>
